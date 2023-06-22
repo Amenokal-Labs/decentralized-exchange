@@ -18,4 +18,8 @@ This project is an implementation of Uniswap V2, a decentralized exchange protoc
 - Or in case the folder is not empty use :
   `forge init --force`
 
-  
+- To check everything is working correctly use : 
+  `forge build`
+
+- To  run the test file use :
+   `forge test` 

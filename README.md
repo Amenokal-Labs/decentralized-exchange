@@ -12,10 +12,8 @@ This project is an implementation of Uniswap V2, a decentralized exchange protoc
 - If you're on Windows, you will need to run this command in  Git BASH or WSL: 
  `curl -L https://foundry.paradigm.xyz | bash`
 
-- to initialize a new project : 
- `forge init `
+- to initialize the project : 
  
-- Or in case the folder is not empty use :
   `forge init --force`
 
 - To check everything is working correctly use : 

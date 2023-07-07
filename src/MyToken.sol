@@ -1,19 +1,16 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.13;
 
 import "openzeppelin-contracts/token/ERC20/ERC20.sol";
 
-contract MyToken is ERC20 {
-    address private _owner;
+contract MyToken is ERC20{
 
-    constructor(uint256 initialSupply) ERC20("MyToken", "MTK") {
-        _mint(msg.sender, initialSupply * (10 ** uint256(decimals())));
-        _owner = msg.sender;
+    constructor (string memory _name, string memory _symbol) ERC20 (_name,_symbol){
     }
 
-    function mint(address recipient, uint256 amount) public {
-        require(msg.sender == _owner, "Only the contract owner can mint tokens");
-        _mint(recipient, amount * (10 ** uint256(decimals())));
+    function mint(address to, uint256 amount) public virtual {
+        _mint(to,amount);
     }
+
+   
 }

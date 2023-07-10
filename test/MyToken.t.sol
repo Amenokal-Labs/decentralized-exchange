@@ -7,18 +7,15 @@ import "../src/MyToken.sol";
 contract ContractTest is Test {
 
     MyToken token;
-
-  
     address alice = vm.addr(0x1);
     address bob = vm.addr(0x2);
 
-    
     function setUp() public {
-        token = new MyToken("MyToken","MTK");
+        token = new MyToken("MyToken", "MTK");
     }
 
     function testName() external {
-        assertEq("MyToken",token.name());
+        assertEq("MyToken", token.name());
     }
 
     function testSymbol() external {
@@ -29,11 +26,5 @@ contract ContractTest is Test {
         token.mint(alice, 2e18);
         assertEq(token.totalSupply(), token.balanceOf(alice));
     }
-   
 
-    
 }
-
-
-  
-    

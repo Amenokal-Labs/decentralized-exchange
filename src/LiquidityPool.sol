@@ -26,7 +26,7 @@ contract LiquidityPool {
         uint256 totalBalanceB = tokenB.balanceOf(address(this));
 
         require(totalBalanceA > 0 && totalBalanceB > 0, "Insufficient liquidity");
-        // the constant product formula which equl to : K = x * y
+        // the constant product formula which equal to : K = x * y
         uint256 totalReserveWithFees = totalBalanceA * totalBalanceB;
         uint256 feeAmount = totalReserveWithFees * 3 / 1000;
         uint256 totalReserveWithoutFees = totalReserveWithFees - feeAmount;

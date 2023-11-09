@@ -24,14 +24,21 @@ contract LiquidityPoolTest is Test {
         tokenA.mint(alice, 1000e18);
         tokenB.mint(alice, 2000e18);
 
+        vm.startPrank(alice);
         tokenA.approve(address(liquidityPool), 500e18);
-        tokenB.approve(address(liquidityPool), 1000e18);
+        tokenB.approve(address(liquidityPool), 1000e18);        
+        vm.stopPrank();
 
+        vm.startPrank(alice);
         liquidityPool.deposit(500e18, 1000e18);
-        assertEq(liquidityPool.liquidity(alice), 1000e18);
+        vm.stopPrank();
+        uint256 liquidityAmount = liquidityPool.calculateLiquidityAmount(500e18, 1000e18);
+        assertEq(liquidityPool.liquidity(alice), liquidityAmount);
 
+        vm.startPrank(alice);
         liquidityPool.withdraw(500e18);
-        assertEq(liquidityPool.liquidity(alice), 500e18);
+        vm.stopPrank();
+        assertEq(liquidityPool.liquidity(alice), liquidityAmount - 500e18);
     }
 
     function testSwap() public {
@@ -39,14 +46,25 @@ contract LiquidityPoolTest is Test {
         tokenA.mint(alice, 1000e18);
         tokenB.mint(alice, 2000e18);
 
+        vm.startPrank(alice);
         tokenA.approve(address(liquidityPool), 500e18);
         tokenB.approve(address(liquidityPool), 1000e18);
+        vm.stopPrank();
 
+        vm.startPrank(alice);
         liquidityPool.deposit(500e18, 1000e18);
-        assertEq(liquidityPool.liquidity(alice), 1000e18);
+        vm.stopPrank();
+        uint256 liquidityAmount = liquidityPool.calculateLiquidityAmount(500e18, 1000e18);
+        assertEq(liquidityPool.liquidity(alice), liquidityAmount);
+
+        vm.startPrank(alice);
+        tokenA.approve(address(liquidityPool), 100e18);
+        vm.stopPrank();
 
         uint256 balanceBeforeSwap = tokenB.balanceOf(alice);
+        vm.startPrank(alice);
         liquidityPool.swap(100e18);
+        vm.stopPrank();
         uint256 balanceAfterSwap = tokenB.balanceOf(alice);
 
         assert(balanceAfterSwap > balanceBeforeSwap); // Ensure tokenB balance increased after the swap

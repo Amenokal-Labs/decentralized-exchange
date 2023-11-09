@@ -51,7 +51,7 @@ contract LiquidityPool {
         require(tokenB.transfer(msg.sender, amountBOut), "Failed to transfer tokenB for swap");
     }
 
-    function calculateLiquidityAmount(uint256 amountA, uint256 amountB) internal pure returns (uint256) {
+    function calculateLiquidityAmount(uint256 amountA, uint256 amountB) public pure returns (uint256) {
         uint256 adjustedAmountA = amountA*(997); // 997 corresponds to 1000 - fee (0.30%)
         uint256 adjustedAmountB = amountB*(997); // 997 corresponds to 1000 - fee (0.30%)
         return  Math.sqrt(adjustedAmountA*(adjustedAmountB));

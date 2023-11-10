@@ -12,7 +12,8 @@ contract LiquidityPool {
     address public owner;
     uint256 public totalLiquidity;
     mapping(address => uint256) public liquidity;
-    uint256 public fee = 30; // 0.30% fee
+    uint256 public constant FEE = 30; // 0.30% fee
+    uint256 public constant ONE_IN_BPS = 1e4;
 
     constructor(IERC20 _tokenA, IERC20 _tokenB) {
         tokenA = _tokenA;
@@ -36,8 +37,8 @@ contract LiquidityPool {
         uint256 amountA = liquidityAmount *(tokenA.balanceOf(address(this)))/(totalLiquidity);
         uint256 amountB = liquidityAmount *(tokenB.balanceOf(address(this)))/(totalLiquidity);
 
-        liquidity[msg.sender] = liquidity[msg.sender]-(liquidityAmount);
-        totalLiquidity = totalLiquidity -(liquidityAmount);
+        liquidity[msg.sender] -= liquidityAmount;
+        totalLiquidity -= liquidityAmount;
 
         require(tokenA.transfer(msg.sender, amountA), "Failed to transfer tokenA");
         require(tokenB.transfer(msg.sender, amountB), "Failed to transfer tokenB");
@@ -52,15 +53,15 @@ contract LiquidityPool {
     }
 
     function calculateLiquidityAmount(uint256 amountA, uint256 amountB) public pure returns (uint256) {
-        uint256 adjustedAmountA = amountA*(997); // 997 corresponds to 1000 - fee (0.30%)
-        uint256 adjustedAmountB = amountB*(997); // 997 corresponds to 1000 - fee (0.30%)
+        uint256 adjustedAmountA = amountA * (ONE_IN_BPS - FEE);
+        uint256 adjustedAmountB = amountB * (ONE_IN_BPS - FEE);
         return  Math.sqrt(adjustedAmountA*(adjustedAmountB));
     }
 
     function calculateSwapAmount(uint256 amountAIn) internal view returns (uint256) {
-        uint256 amountAWithFee = amountAIn*(1000); // 1000 corresponds to 1000 (100%)
+        uint256 amountAWithFee = amountAIn * (ONE_IN_BPS - FEE); 
         uint256 numerator = amountAWithFee*(tokenB.balanceOf(address(this)));
-        uint256 denominator = tokenA.balanceOf(address(this))*(1000)+(amountAWithFee);
+        uint256 denominator = tokenA.balanceOf(address(this))*(ONE_IN_BPS)+(amountAWithFee);
         return numerator/(denominator);
     }
 }
